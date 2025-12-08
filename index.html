@@ -45,6 +45,8 @@
 
       document.getElementById("message").innerText =
         error ? "Error: " + error.message : "Saved!";
+      message.innerText = "Saved! Cooldown: 10s";
+  startCooldown(10); // 10 seconds
     });
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
