@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Submitted Answers</title>
+</head>
+<body>
+
+  <h2>All Submitted Responses</h2>
+
+  <table border="1" id="responsesTable">
+    <tr>
+      <th>Name</th>
+      <th>Favorite Color</th>
+      <th>Age</th>
+    </tr>
+  </table>
+
+  <button id="backBtn">Back to Form</button>
+
+  <script type="module">
+    import { supabase } from './supabase.js';
+
+    async function loadResponses() {
+      const { data, error } = await supabase
+        .from('responses')
+        .select('*');
+
+      if (error) {
+        alert("Error: " + error.message);
+        return;
+      }
+
+      const table = document.getElementById("responsesTable");
+
+      data.forEach(row => {
+        const newRow = table.insertRow();
+        newRow.insertCell(0).innerText = row.q1;
+        newRow.insertCell(1).innerText = row.q2;
+        newRow.insertCell(2).innerText = row.q3;
+      });
+    }
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    loadResponses();
+
+
+
+  if (!localStorage.getItem("username")) {
+    window.location.href = "login.html";
+  }
+
+
+  </script>
+
+</body>
+</html>
