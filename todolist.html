@@ -1,1 +1,61 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>todolistatbldes</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <h2>Visi uzdevumi!</h2>
+
+  <table border="1" id="responsesTable">
+    <tr>
+      <th>Uzdevums</th>
+      <th>Veids</th>
+      <th>Svarīgums</th>
+    </tr>
+  </table>
+
+  <button id="backBtn">Back to Form</button>
+
+  <script type="module">
+    import { supabase } from './supabase.js';
+
+    async function loadResponses() {
+      const { data, error } = await supabase
+        .from('responses')
+        .select('*');
+
+      if (error) {
+        alert("Error: " + error.message);
+        return;
+      }
+
+      const table = document.getElementById("Todolist");
+
+      data.forEach(row => {
+        const newRow = table.insertRow();
+        newRow.insertCell(0).innerText = row.uzd;
+        newRow.insertCell(1).innerText = row.uzdveids;
+        newRow.insertCell(2).innerText = row.svarigums;
+      });
+    }
+
+    document.getElementById("backBtn").addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+
+    loadResponses();
+
+
+
+  if (!localStorage.getItem("username")) {
+    window.location.href = "login.html";
+  }
+
+
+  </script>
+
+</body>
+</html>
