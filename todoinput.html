@@ -51,7 +51,8 @@
 
       const { error } = await supabase
         .from('responses')
-        .insert([ { uzd, veids, svarigums } ]);
+        .insert([{ uzd, uzdveids, svarigums }]);
+
 
       function startCooldown(seconds) {
   const msgEl = document.getElementById("message");
