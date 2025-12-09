@@ -1,70 +1,52 @@
+<script type="module">
+import { supabase } from './supabase.js';
 
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Form Page</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <h2>Protected Form</h2>
-
-  <script>
-    // PROTECT THE PAGE
-    if (!localStorage.getItem("username")) {
-      window.location.href = "login.html";
-    }
-  </script>
-
-  <label>What is your name?</label><br>
-  <input id="q1" type="text" minlength="5" required><br><br>
-
-  <label>Favorite color?</label><br>
-  <input id="q2" type="text" minlength="5" required><br><br>
-
-  <label>How old are you?</label><br>
-  <input id="q3" type="number" minlength="5" required><br><br>
-
-  <button id="send">Submit</button>
-  
-  <br>
-  <br>
-  <button onclick="window.location.href='responses.html'">View All Responses</button>
-  <button onclick="window.location.href='index.html'">Atpakaļ sākumā!</button>
-  <p id="message"></p>
-
-  <script type="module">
-    import { supabase } from './supabase.js';
-
-    document.getElementById("send").addEventListener("click", async () => {
-      const q1 = document.getElementById("q1").value;
-      const q2 = document.getElementById("q2").value;
-      const q3 = document.getElementById("q3").value;
-
-      const { error } = await supabase
-        .from('responses')
-        .insert([ { q1, q2, q3 } ]);
-
-      function startCooldown(seconds) {
+// Cooldown function moved OUTSIDE click handler
+function startCooldown(seconds) {
   const msgEl = document.getElementById("message");
+  const sendBtn = document.getElementById("send");
+
+  sendBtn.disabled = true;
   let timeLeft = seconds;
+  msgEl.innerText = `Saved! Cooldown: ${timeLeft}s`;
 
   const interval = setInterval(() => {
-    msgEl.innerText = `Saved! Cooldown: ${timeLeft}s`;
     timeLeft--;
+    msgEl.innerText = `Saved! Cooldown: ${timeLeft}s`;
 
-    if (timeLeft < 0) {
+    if (timeLeft <= 0) {
       clearInterval(interval);
       msgEl.innerText = "Ready!";
+      sendBtn.disabled = false;
     }
   }, 1000);
 }
 
-// Example success handler:
-const msgEl = document.getElementById("message");
-msgEl.innerText = "Saved!";
-startCooldown(10);
+document.getElementById("send").addEventListener("click", async () => {
+  const q1 = document.getElementById("q1").value;
+  const q2 = document.getElementById("q2").value;
+  const q3 = document.getElementById("q3").value;
 
+  // VALIDATION
+  if (q1.length < 3 || q2.length < 3) {
+    document.getElementById("message").innerText = "First 2 fields need at least 3 characters!";
+    return;
+  }
 
-  </script>
-</body>
-</html>
+  if (!q3 || q3 <= 0) {
+    document.getElementById("message").innerText = "Age must be a positive number!";
+    return;
+  }
+
+  const { error } = await supabase
+    .from('responses')
+    .insert([{ q1, q2, q3 }]);
+
+  if (error) {
+    document.getElementById("message").innerText = "Error: " + error.message;
+    return;
+  }
+
+  startCooldown(10);
+});
+</script>
