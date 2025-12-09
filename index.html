@@ -15,13 +15,13 @@
   </script>
 
   <label>What is your name?</label><br>
-  <input id="q1" type="text"><br><br>
+  <input id="q1" type="text" minlength="5" required><br><br>
 
   <label>Favorite color?</label><br>
-  <input id="q2" type="text"><br><br>
+  <input id="q2" type="text" minlength="5" required><br><br>
 
   <label>How old are you?</label><br>
-  <input id="q3" type="number"><br><br>
+  <input id="q3" type="number" minlength="5" required><br><br>
 
   <button id="send">Submit</button>
   <button id="logoutBtn">Logout</button>
@@ -43,11 +43,26 @@
         .from('responses')
         .insert([ { q1, q2, q3 } ]);
 
-      document.getElementById("message").innerText =
-        error ? "Error: " + error.message : "Saved!";
-      message.innerText = "Saved! Cooldown: 10s";
-  startCooldown(10); // 10 seconds
-    });
+      function startCooldown(seconds) {
+  const msgEl = document.getElementById("message");
+  let timeLeft = seconds;
+
+  const interval = setInterval(() => {
+    msgEl.innerText = `Saved! Cooldown: ${timeLeft}s`;
+    timeLeft--;
+
+    if (timeLeft < 0) {
+      clearInterval(interval);
+      msgEl.innerText = "Ready!";
+    }
+  }, 1000);
+}
+
+// Example success handler:
+const msgEl = document.getElementById("message");
+msgEl.innerText = "Saved!";
+startCooldown(10);
+
 
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("username");
