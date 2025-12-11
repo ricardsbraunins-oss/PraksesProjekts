@@ -10,15 +10,15 @@
   <input id="username" type="text" placeholder="Username"><br><br>
   <input id="password" type="password" placeholder="Password"><br><br>
 
-  <button id="loginBtn">Login</button>
-  <button id="signupBtn">Sign Up</button> <!-- New signup button -->
+  <button id="loginBtn">Ienākt</button>
+  <button id="signupBtn">Reģistrēties</button> 
 
   <p id="message"></p>
 
   <script type="module">
     import { supabase } from './supabase.js';
 
-    // LOGIN BUTTON
+    
     document.getElementById("loginBtn").addEventListener("click", async () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
@@ -38,7 +38,7 @@
       }
     });
 
-    // SIGNUP BUTTON (REDIRECT TO SIGNUP PAGE)
+    
     document.getElementById("signupBtn").addEventListener("click", () => {
       window.location.href = "signup.html";
     });
