@@ -21,7 +21,11 @@
   <script>
     if (!localStorage.getItem("username")) {
       window.location.href = "login.html";
-    } //parbauda vai ir logged in.
+    } 
+
+    const username = localStorage.getItem("username");
+  document.getElementById("userDisplay").innerText = username;
+    
   </script>
 
   <label>Kā tevi sauc?</label><br>
@@ -53,8 +57,7 @@
 
   <script type="module">
 
-    const username = localStorage.getItem("username");
-  document.getElementById("userDisplay").innerText = username;
+    
 
     
     import { supabase } from './supabase.js';
