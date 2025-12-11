@@ -23,6 +23,7 @@
     <th>id</th>
     <th>username</th>
     <th>password</th>
+    <th>Show</th>
     <th>mainīt paroli</th>
     <th>dzēst</th>
   </tr>
@@ -87,6 +88,33 @@ async function loadUsers() {
     deleteCell.appendChild(deleteBtn);
   });
 }
+
+ // PASSWORD (hidden by default)
+  const passCell = newRow.insertCell(2);
+  passCell.innerText = "*****"; // hide actual password
+
+  // SHOW/HIDE PASSWORD BUTTON
+  const showCell = newRow.insertCell(3);
+  const showBtn = document.createElement("button");
+  showBtn.innerText = "Show";
+  showBtn.style.width = "80px";
+
+  let showing = false; // track state
+
+  showBtn.addEventListener("click", () => {
+    if (!showing) {
+      passCell.innerText = row.password; // reveal password
+      showBtn.innerText = "Hide";
+      showing = true;
+    } else {
+      passCell.innerText = "*****"; // hide again
+      showBtn.innerText = "Show";
+      showing = false;
+    }
+  });
+
+  showCell.appendChild(showBtn);
+  
 
 // CHANGE PASSWORD BUTTON
 const changePassCell = newRow.insertCell(3);
