@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>todolistatbldes</title>
+  <title>todolistatbildes</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  
+
+<!-- Parāda lietotājvārdu augšējā labajā stūrī -->
 <div id="userDisplay" style="
   position: fixed;
   top: 10px;
@@ -14,99 +15,105 @@
   color: #00eaff;
 "></div>
 
-  <h2>Visi uzdevumi!</h2>
-  <br>
-  <table border="1" id="Todolist">
-    <tr>
-      <th>Uzdevums</th>
-      <th>Veids</th>
-      <th>Svarīgums</th>
-      <th>Pabeigts</th>
-      <th>Dzēst</th>
-    </tr>
-  </table>
- <br>
-  <button onclick="window.location.href='todoinput.html'">Jauns ToDo</button>
-  
+<h2>Visi uzdevumi!</h2>
+
+<br>
+
+<!-- Tabula ar lietotāja uzdevumiem -->
+<table border="1" id="Todolist">
+  <tr>
+    <th>Uzdevums</th>
+    <th>Veids</th>
+    <th>Svarīgums</th>
+    <th>Pabeigts</th>
+    <th>Dzēst</th>
+  </tr>
+</table>
+
+<br>
+<button onclick="window.location.href='todoinput.html'">Jauns ToDo</button>
+
 <script>
-  const username = localStorage.getItem("username");
-  document.getElementById("userDisplay").innerText = username;
+  // Parāda lietotājvārdu
+  const username = localStorage.getItem("username")
+  document.getElementById("userDisplay").innerText = username
 </script>
 
-  <script type="module">
+<script type="module">
+  import { supabase } from './supabase.js'
 
-    
-    
-    import { supabase } from './supabase.js';
+  // Aizsardzība – ja nav ielogojies, neļauj skatīt lapu
+  if (!localStorage.getItem("username")) {
+    window.location.href = "login.html"
+  }
 
-    // PROTECT THE PAGE
-    if (!localStorage.getItem("username")) {
-      window.location.href = "login.html";
+  // Ielādē lietotāja todos
+  async function loadResponses() {
+    const username = localStorage.getItem("username")
+
+    const { data, error } = await supabase
+      .from('todolist')
+      .select('*')
+      .eq('username', username)   // tikai šī lietotāja uzdevumi
+
+    // Ja Supabase kļūda
+    if (error) {
+      alert("Error: " + error.message)
+      return
     }
 
-    async function loadResponses() {
-      const username = localStorage.getItem("username");   // 👈 CURRENT USER
+    const table = document.getElementById("Todolist")
 
-      const { data, error } = await supabase
-        .from('todolist')
-        .select('*')
-        .eq('username', username);   // 👈 LOAD ONLY THIS USER'S TASKS
+    // Ievieto katru uzdevumu tabulā
+    data.forEach(row => {
+      const newRow = table.insertRow()
 
-      if (error) {
-        alert("Error: " + error.message);
-        return;
-      }
+      newRow.insertCell(0).innerText = row.uzd
+      newRow.insertCell(1).innerText = row.uzdveids
+      newRow.insertCell(2).innerText = row.svarigums
 
-      const table = document.getElementById("Todolist");
+      // Checkbox – pabeigts vai nav
+      const checkCell = newRow.insertCell(3)
+      const checkbox = document.createElement("input")
+      checkbox.type = "checkbox"
+      checkbox.style.width = "25px"
+      checkbox.style.height = "25px"
+      checkbox.checked = row.pabeigts === true
 
-      data.forEach(row => {
-        const newRow = table.insertRow();
+      checkbox.addEventListener("change", async () => {
+        await supabase
+          .from("todolist")
+          .update({ pabeigts: checkbox.checked })
+          .eq("id", row.id)
+      })
 
-        newRow.insertCell(0).innerText = row.uzd;
-        newRow.insertCell(1).innerText = row.uzdveids;
-        newRow.insertCell(2).innerText = row.svarigums;
+      checkCell.appendChild(checkbox)
 
-        // CHECKBOX
-        const checkCell = newRow.insertCell(3);
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.style.width = "25px";
-        checkbox.style.height = "25px";
-        checkbox.checked = row.pabeigts === true;
+      // Dzēšanas poga
+      const deleteCell = newRow.insertCell(4)
+      const deleteBtn = document.createElement("button")
+      deleteBtn.style.width = "80px"
+      deleteBtn.innerText = "X"
+      deleteBtn.style.color = "red"
 
-        checkbox.addEventListener("change", async () => {
-          await supabase
-            .from("todolist")
-            .update({ pabeigts: checkbox.checked })
-            .eq("id", row.id);
-        });
+      deleteBtn.addEventListener("click", async () => {
+        if (!confirm("Tiešām dzēst šo uzdevumu?")) return
 
-        checkCell.appendChild(checkbox);
+        await supabase
+          .from("todolist")
+          .delete()
+          .eq("id", row.id)
 
-        // DELETE BUTTON
-        const deleteCell = newRow.insertCell(4);
-        const deleteBtn = document.createElement("button");
-        deleteBtn.style.width = "80px";
-        deleteBtn.innerText = "X";
-        deleteBtn.style.color = "red";
+        newRow.remove()
+      })
 
-        deleteBtn.addEventListener("click", async () => {
-          if (!confirm("Tiešām dzēst šo uzdevumu?")) return;
+      deleteCell.appendChild(deleteBtn)
+    })
+  }
 
-          await supabase
-            .from("todolist")
-            .delete()
-            .eq("id", row.id);
-
-          newRow.remove();
-        });
-
-        deleteCell.appendChild(deleteBtn);
-      });
-    }
-
-    loadResponses();
-  </script>
+  // Izsauc funkciju
+  loadResponses()
+</script>
 
 </body>
 </html>
