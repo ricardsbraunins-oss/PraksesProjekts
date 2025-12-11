@@ -36,6 +36,7 @@
       <th>Ar ko pārvietojas</th>
       <th>Kur mācās/strādā</th>
       <th>Dzīvo dienesta viesnīcā?</th>
+      <th>Dzēst</th>
     </tr>
   </table>
 
@@ -67,6 +68,27 @@
       });
     }
 
+     // DELETE BUTTON
+        const deleteCell = newRow.insertCell(6);
+        const deleteBtn = document.createElement("button");
+        deleteBtn.style.width = "80px";
+        deleteBtn.innerText = "X";
+        deleteBtn.style.color = "red";
+
+        deleteBtn.addEventListener("click", async () => {
+          if (!confirm("Tiešām dzēst šo uzdevumu?")) return;
+
+          await supabase
+            .from("responses")
+            .delete()
+            .eq("id", row.id);
+
+          newRow.remove();
+        });
+
+        deleteCell.appendChild(deleteBtn);
+      });
+    }
     
 
     loadResponses();
