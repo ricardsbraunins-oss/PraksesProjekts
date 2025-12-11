@@ -30,23 +30,7 @@
     <button id="adminBtn" style="display:none;" onclick="window.location.href='adminPanel.html'">Admin Panel</button>
   </div>
   
-  <script type="module">
-    // Ja lietotājs ir admin, parāda admin pogu
-    if (username === "admin") {
-      document.getElementById("adminBtn").style.display = "inline-block"
-    }
-
-    // Izlogošanās poga
-    document.getElementById("logoutBtn").addEventListener("click", () => {
-      localStorage.removeItem("username")
-      window.location.href = "login.html"
-    })
-
-    // Parāda lietotājvārdu ekrāna augšējā labajā stūrī
-    document.getElementById("usernameDisplay").textContent = username
-  </script>
-
-  <!-- Lietotāja info bloks -->
+  <!-- Lietotāja profila info  -->
   <div id="userDisplay" style="
       position: fixed;
       top: 10px;
@@ -66,6 +50,25 @@
     ">Logout
     </button>
   </div>
+
+  
+  <script type="module">
+    // Ja lietotājs ir admin, parāda admin pogu
+    if (username === "admin") {
+      document.getElementById("adminBtn").style.display = "inline-block"
+    }
+
+    // Izlogošanās poga
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.removeItem("username")
+      window.location.href = "login.html"
+    })
+
+    // Parāda lietotājvārdu ekrāna augšējā labajā stūrī
+    document.getElementById("usernameDisplay").textContent = username
+  </script>
+
+  
 
 </body>
 </html>
