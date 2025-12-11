@@ -6,6 +6,7 @@
 </head>
 <body>
 
+<!-- Parāda lietotājvārdu augšējā labajā stūrī -->
 <div id="userDisplay" style="
   position: fixed;
   top: 10px;
@@ -15,16 +16,18 @@
 "></div>
 
 <script>
- const currentUser = localStorage.getItem("username");
-if (currentUser !== "admin") {
-  alert("Access denied! Only admin can view this page.");
-  window.location.href = "index.html";
-}
+  // Pārbauda vai lietotājs ir admin
+  const currentUser = localStorage.getItem("username")
+  if (currentUser !== "admin") {
+    alert("Access denied! Only admin can view this page.")
+    window.location.href = "index.html"
+  }
 </script>
 
-<h2>Visas aptaujas atbildes+admin funkcija</h2>
+<h2>Visas aptaujas atbildes + admin funkcija</h2>
 <p style="color:red;">Tikai administratoram!</p>
 
+<!-- Tabula kurā tiks ielikti visi ieraksti -->
 <table border="1" id="responsesTable">
   <tr>
     <th>Vārds</th>
@@ -37,56 +40,62 @@ if (currentUser !== "admin") {
   </tr>
 </table>
 
+<!-- Poga atpakaļ -->
 <button onclick="window.location.href='index.html'">Atpakaļ sākumā!</button>
 
 <script type="module">
-import { supabase } from './supabase.js';
+  import { supabase } from './supabase.js'
 
-async function loadResponses() {
-  const { data, error } = await supabase
-    .from('responses')
-    .select('*');
+  // Ielādē visus aptaujas ierakstus
+  async function loadResponses() {
+    const { data, error } = await supabase
+      .from('responses')
+      .select('*')
 
-  if (error) {
-    alert("Error: " + error.message);
-    return;
+    // Ja Supabase dod kļūdu
+    if (error) {
+      alert("Error: " + error.message)
+      return
+    }
+
+    const table = document.getElementById("responsesTable")
+
+    // Katrs ieraksts tiek ielikts tabulā
+    data.forEach(row => {
+      const newRow = table.insertRow()
+
+      newRow.insertCell(0).innerText = row.q1
+      newRow.insertCell(1).innerText = row.q2
+      newRow.insertCell(2).innerText = row.q3
+      newRow.insertCell(3).innerText = row.q4
+      newRow.insertCell(4).innerText = row.q5
+      newRow.insertCell(5).innerText = row.q6
+
+      // Dzēšanas poga
+      const deleteCell = newRow.insertCell(6)
+      const deleteBtn = document.createElement("button")
+      deleteBtn.style.width = "80px"
+      deleteBtn.style.color = "red"
+      deleteBtn.innerText = "X"
+
+      // Dzēš ierakstu no Supabase un tabulas
+      deleteBtn.addEventListener("click", async () => {
+        if (!confirm("Tiešām dzēst šo ierakstu?")) return
+
+        await supabase
+          .from("responses")
+          .delete()
+          .eq("id", row.id)
+
+        newRow.remove()
+      })
+
+      deleteCell.appendChild(deleteBtn)
+    })
   }
 
-  const table = document.getElementById("responsesTable");
-
-  data.forEach(row => {
-    const newRow = table.insertRow();
-
-    newRow.insertCell(0).innerText = row.q1;
-    newRow.insertCell(1).innerText = row.q2;
-    newRow.insertCell(2).innerText = row.q3;
-    newRow.insertCell(3).innerText = row.q4;
-    newRow.insertCell(4).innerText = row.q5;
-    newRow.insertCell(5).innerText = row.q6;
-
-    // ✅ DELETE BUTTON inside loop
-    const deleteCell = newRow.insertCell(6);
-    const deleteBtn = document.createElement("button");
-    deleteBtn.style.width = "80px";
-    deleteBtn.innerText = "X";
-    deleteBtn.style.color = "red";
-
-    deleteBtn.addEventListener("click", async () => {
-      if (!confirm("Tiešām dzēst šo ierakstu?")) return;
-
-      await supabase
-        .from("responses")
-        .delete()
-        .eq("id", row.id);
-
-      newRow.remove();
-    });
-
-    deleteCell.appendChild(deleteBtn);
-  });
-}
-
-loadResponses();
+  // Izsauc datu ielādi
+  loadResponses()
 </script>
 
 </body>
