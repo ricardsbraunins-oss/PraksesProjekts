@@ -13,6 +13,7 @@
       <th>Uzdevums</th>
       <th>Veids</th>
       <th>Svarīgums</th>
+      <th>Pabeigts</th>
     </tr>
   </table>
 
@@ -45,6 +46,22 @@
         newRow.insertCell(2).innerText = row.svarigums;
       });
     }
+
+    const checkCell = newRow.insertCell(3);
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.checked = row.done === true;
+
+      checkbox.addEventListener("change", async () => {
+        await supabase
+          .from("todolist")
+          .update({ pabeigts: checkbox.checked })
+          .eq("id", row.id);
+      });
+
+      checkCell.appendChild(checkbox);
+    });
+  }
 
     document.getElementById("backBtn").addEventListener("click", () => {
       window.location.href = "todoinput.html";
