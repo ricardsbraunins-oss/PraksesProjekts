@@ -52,6 +52,8 @@
         const checkCell = newRow.insertCell(3);
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
+        checkbox.style.width = "25px";
+        checkbox.style.height = "25px";
         checkbox.checked = row.pabeigts === true;
 
         checkbox.addEventListener("change", async () => {
