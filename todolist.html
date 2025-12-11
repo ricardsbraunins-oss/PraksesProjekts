@@ -50,12 +50,14 @@
     const checkCell = newRow.insertCell(3);
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
-      checkbox.checked = row.done === true;
+
+      
+      checkbox.checked = row.pabeigts === true;
 
       checkbox.addEventListener("change", async () => {
         await supabase
           .from("todolist")
-          .update({ pabeigts: checkbox.checked })
+          .update({ pabeigts: checkbox.checked })  
           .eq("id", row.id);
       });
 
