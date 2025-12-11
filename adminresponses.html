@@ -15,17 +15,15 @@
 "></div>
 
 <script>
-  // Protect page
-  if (!localStorage.getItem("username")) {
-    window.location.href = "login.html";
-  }
-
-  // Show username
-  const username = localStorage.getItem("username");
-  document.getElementById("userDisplay").innerText = username;
+ const currentUser = localStorage.getItem("username");
+if (currentUser !== "admin") {
+  alert("Access denied! Only admin can view this page.");
+  window.location.href = "index.html";
+}
 </script>
 
 <h2>Visas aptaujas atbildes+admin funkcija</h2>
+<p style="color:red;">Tikai administratoram!</p>
 
 <table border="1" id="responsesTable">
   <tr>
