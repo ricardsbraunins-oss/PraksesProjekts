@@ -1,32 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Form Page</title>
+  <title>Aptauja!</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h2>Protected Form</h2>
+  <h2>Aptauja!</h2>
 
   <script>
-    // PROTECT THE PAGE
     if (!localStorage.getItem("username")) {
       window.location.href = "login.html";
-    }
+    } //parbauda vai ir logged in.
   </script>
 
-  <label>What is your name?</label><br>
+  <label>Kā tevi sauc?</label><br>
   <input id="q1" type="text" minlength="3" required><br><br>
 
-  <label>Favorite color?</label><br>
+  <label>Kas ir tava mīļākā krāsa?</label><br>
   <input id="q2" type="text" minlength="3" required><br><br>
 
-  <label>How old are you?</label><br>
+  <label>Cik tev gadi?</label><br>
   <input id="q3" type="number" min="1" required><br><br>
 
+  <label>Ar ko tu ikdienā pārvietojies?</label><br>
+  <input id="q4" type="text" minlength="3" required><br><br>
+
+  <label>Kur tu mācies/strādā?</label><br>
+  <input id="q5" type="text" minlength="3" required><br><br>
+
+   <label>Vai tu dzīvo dienesta viesnīcā?</label><br>
+  <input id="q6" type="text" minlength="3" required><br><br>
+
+  
   <button id="send">Submit</button>
   
   <br><br>
-  <button onclick="window.location.href='responses.html'">View All Responses</button>
+  <button onclick="window.location.href='responses.html'">Skatīt visas atbildes.</button>
   <button onclick="window.location.href='index.html'">Atpakaļ sākumā!</button>
 
   <p id="message"></p>
@@ -59,21 +68,24 @@
       const q1 = document.getElementById("q1").value;
       const q2 = document.getElementById("q2").value;
       const q3 = document.getElementById("q3").value;
+      const q3 = document.getElementById("q4").value;
+      const q3 = document.getElementById("q5").value;
+      const q3 = document.getElementById("q6").value;
 
-      // VALIDATION
-      if (q1.length < 3 || q2.length < 3) {
-        document.getElementById("message").innerText = "First 2 fields need at least 3 characters!";
+     
+      if (q1.length < 3 || q2.length < 3 || q4.length < 3 || q5.length < 3 || q6.length < 3 ) {
+        document.getElementById("message").innerText = "Teksta laukos jābū vizmaz 3 simboliem!";
         return;
       }
 
       if (!q3 || q3 <= 0) {
-        document.getElementById("message").innerText = "Age must be a positive number!";
+        document.getElementById("message").innerText = "Vecumam jābūt pozitīvam ciparam!";
         return;
       }
 
       const { error } = await supabase
         .from('responses')
-        .insert([{ q1, q2, q3 }]);
+        .insert([{ q1, q2, q3, q4, q5, q6}]);
 
       if (error) {
         document.getElementById("message").innerText = "Error: " + error.message;
