@@ -27,11 +27,15 @@
   </table>
  <br>
   <button onclick="window.location.href='todoinput.html'">Jauns ToDo</button>
+  
+<script>
+  const username = localStorage.getItem("username");
+  document.getElementById("userDisplay").innerText = username;
+</script>
 
   <script type="module">
 
-    const username = localStorage.getItem("username");
-  document.getElementById("userDisplay").innerText = username;
+    
     
     import { supabase } from './supabase.js';
 
