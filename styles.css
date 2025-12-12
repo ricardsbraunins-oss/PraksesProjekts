@@ -1,25 +1,30 @@
-/* ===== Global Page Style ===== */
+/* ===== Global ===== */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: "Segoe UI", Arial, sans-serif;
   background: linear-gradient(135deg, #e1e7ec, #cfd8e3);
   color: #1f2933;
   text-align: center;
   margin: 0;
-  padding-top: 60px;
+  padding: 50px 12px;
 }
-
 
 /* ===== Headings ===== */
 h2 {
-  font-size: 30px;
+  font-size: 28px;
   margin-bottom: 20px;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: #0f4c81;
 }
 
-/* ===== Input Fields ===== */
+/* ===== Inputs ===== */
 input {
+  width: 260px;
+  max-width: 100%;
   padding: 12px 14px;
   margin: 10px;
   border-radius: 6px;
@@ -38,10 +43,11 @@ input:focus {
 
 /* ===== Buttons ===== */
 button {
-  display: inline-block;
+  display: block;
   width: 260px;
+  max-width: 100%;
   padding: 14px 0;
-  margin-top: 14px;
+  margin: 14px auto 0;
   background: #0f4c81;
   border: none;
   color: #ffffff;
@@ -49,8 +55,8 @@ button {
   font-weight: 600;
   cursor: pointer;
   border-radius: 6px;
-  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
   letter-spacing: 1px;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
 
 button:hover {
@@ -64,10 +70,18 @@ button:active {
   box-shadow: 0 4px 12px rgba(15, 76, 129, 0.2);
 }
 
+/* ===== Table Wrapper ===== */
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
 /* ===== Table ===== */
 table {
-  margin: 20px auto 0;
   width: 85%;
+  min-width: 600px;
+  margin: 0 auto;
   border-collapse: collapse;
   background: #ffffff;
   border-radius: 8px;
@@ -82,7 +96,7 @@ th, td {
   text-align: center;
 }
 
-/* ===== Table Headers ===== */
+/* ===== Table Header ===== */
 th {
   background: #0f4c81;
   color: #ffffff;
@@ -90,7 +104,7 @@ th {
   letter-spacing: 1px;
 }
 
-/* ===== Table Rows Hover ===== */
+/* ===== Table Row Hover ===== */
 tr:hover td {
   background: #f2f7fc;
 }
@@ -100,4 +114,33 @@ tr:hover td {
   margin-top: 20px;
   font-size: 17px;
   color: #0f4c81;
+}
+
+/* ===== Mobile Optimizations ===== */
+@media (max-width: 768px) {
+  body {
+    padding: 40px 10px;
+  }
+
+  h2 {
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+
+  input {
+    width: 95%;
+    margin: 8px auto;
+    display: block;
+  }
+
+  button {
+    width: 95%;
+    font-size: 15px;
+  }
+
+  table {
+    width: 100%;
+    min-width: unset;
+    box-shadow: none;
+  }
 }
