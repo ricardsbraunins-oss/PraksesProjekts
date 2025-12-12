@@ -1,12 +1,13 @@
 /* ===== Global Page Style ===== */
 body {
   font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(135deg, #f4f8fb, #e9f1f7);
+  background: linear-gradient(135deg, #e1e7ec, #cfd8e3);
   color: #1f2933;
   text-align: center;
   margin: 0;
   padding-top: 60px;
 }
+
 
 /* ===== Headings ===== */
 h2 {
